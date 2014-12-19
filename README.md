@@ -33,8 +33,8 @@ http://www.freedesktop.org/software/pulseaudio/doxygen/simple.html
 todo
 ----
 
- * channel maps and buffer attributes for streams
- * proper error reporting
+ * channel maps and buffer attributes for streams (medium)
+ * proper error reporting (easy)
 
 license
 -------
