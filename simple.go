@@ -67,8 +67,8 @@ type Stream struct {
 	simple *C.pa_simple
 }
 
-// Record creates a new stream for recording and returns its pointer.
-func Record(clientName, streamName string, spec *SampleSpec) (*Stream, error) {
+// Capture creates a new stream for recording and returns its pointer.
+func Capture(clientName, streamName string, spec *SampleSpec) (*Stream, error) {
 	return NewStream("", clientName, STREAM_RECORD, "", streamName, spec, nil, nil)
 }
 
