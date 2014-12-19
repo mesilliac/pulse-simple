@@ -1,3 +1,24 @@
+// pulse-simple wraps PulseAudio's Simple API using CGo,
+// for easy audio playback and capture via PulseAudio.
+//
+// Basic usage is to request a playback or capture stream,
+// then write bytes to or read bytes from it.
+//
+// Reading and writing will block until the given byte slice
+// is completely consumed or filled, or an error occurs.
+//
+// The format of the data will be as requested on stream creation.
+//
+//  ss := pulse.SampleSpec{pulse.SAMPLE_S16LE, 44100, 2}
+//  stream, _ := pulse.Playback("my app", "my stream", &ss)
+//  defer stream.Free()
+//  defer stream.Drain()
+//  stream.Write(data)
+//
+// More example usage can be found in the examples folder.
+//
+// For more information, see the PulseAudio Simple API documentation at
+// http://www.freedesktop.org/software/pulseaudio/doxygen/simple.html
 package pulse
 
 import (

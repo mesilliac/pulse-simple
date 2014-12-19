@@ -1,4 +1,6 @@
-// generate a sine wave and send it to the default audio output
+// generate some simple tones and play them on the default audio output.
+//
+// to run this example, simply `go run examples/sinewave.go`.
 package main
 
 import (
