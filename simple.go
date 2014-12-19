@@ -58,9 +58,9 @@ const (
 )
 
 type SampleSpec struct {
-	format   SampleFormat
-	rate     uint32
-	channels uint8
+	Format   SampleFormat
+	Rate     uint32
+	Channels uint8
 }
 
 type Stream struct {
@@ -111,9 +111,9 @@ func NewStream(
 	var err C.int
 
 	ss := C.pa_sample_spec{
-		format:   C.pa_sample_format_t(spec.format),
-		rate:     C.uint32_t(spec.rate),
-		channels: C.uint8_t(spec.channels),
+		format:   C.pa_sample_format_t(spec.Format),
+		rate:     C.uint32_t(spec.Rate),
+		channels: C.uint8_t(spec.Channels),
 	}
 
 	s.simple = C.pa_simple_new(
