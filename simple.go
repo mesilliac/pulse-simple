@@ -120,7 +120,7 @@ func NewStream(
 
 	var dev *C.char
 	if deviceName != "" {
-		dev := C.CString(deviceName)
+		dev = C.CString(deviceName)
 		defer C.free(unsafe.Pointer(dev))
 	}
 
