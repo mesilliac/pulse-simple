@@ -30,6 +30,12 @@ More example usage can be found in the examples folder.
 For more information, see the PulseAudio Simple API documentation at
 http://www.freedesktop.org/software/pulseaudio/doxygen/simple.html
 
+todo
+----
+
+ * channel maps and buffer attributes for streams
+ * proper error reporting
+
 license
 -------
 
