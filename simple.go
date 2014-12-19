@@ -68,21 +68,26 @@ type Stream struct {
 }
 
 // Record creates a new stream for recording and returns its pointer.
-func Record(clientName, streamName string, spec SampleSpec) (*Stream, error) {
-	return NewStream("", clientName, STREAM_RECORD, "", streamName, spec, 0, 0)
+func Record(clientName, streamName string, spec *SampleSpec) (*Stream, error) {
+	return NewStream("", clientName, STREAM_RECORD, "", streamName, spec, nil, nil)
 }
 
 // Playback creates a new stream for playback and returns its pointer.
-func Playback(clientName, streamName string, spec SampleSpec) (*Stream, error) {
-	return NewStream("", clientName, STREAM_PLAYBACK, "", streamName, spec, 0, 0)
+func Playback(clientName, streamName string, spec *SampleSpec) (*Stream, error) {
+	return NewStream("", clientName, STREAM_PLAYBACK, "", streamName, spec, nil, nil)
 }
 
 type ChannelMap int // FIXME: STUB
 type BufferAttr int // FIXME: STUB
 
-func NewStream(serverName, clientName string, dir StreamDirection,
-	deviceName, streamName string, spec SampleSpec,
-	cmap ChannelMap, battr BufferAttr) (*Stream, error) {
+func NewStream(
+	serverName, clientName string,
+	dir StreamDirection,
+	deviceName, streamName string,
+	spec *SampleSpec,
+	cmap *ChannelMap,
+	battr *BufferAttr,
+) (*Stream, error) {
 
 	s := new(Stream)
 
