@@ -56,6 +56,9 @@ type SampleSpec struct {
 }
 
 func (spec *SampleSpec) toC() *C.pa_sample_spec {
+	if m == nil {
+		return nil
+	}
 	return &C.pa_sample_spec{
 		format:   C.pa_sample_format_t(spec.Format),
 		rate:     C.uint32_t(spec.Rate),

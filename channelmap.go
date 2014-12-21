@@ -123,6 +123,9 @@ func (m *ChannelMap) fromC(cmap *C.pa_channel_map) {
 }
 
 func (m *ChannelMap) toC() *C.pa_channel_map {
+	if m == nil {
+		return nil
+	}
 	cmap := &C.pa_channel_map{}
 	cmap.channels = C.uint8_t(m.Channels)
 	for i := 0; i < CHANNELS_MAX; i++ {
