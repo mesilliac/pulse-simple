@@ -99,7 +99,7 @@ func (spec *SampleSpec) UsecToBytes(usec uint64) uint {
 	return uint(C.pa_usec_to_bytes(C.pa_usec_t(usec), cSampleSpec(spec)))
 }
 
-/*
+/* TODO?
 // Initialize the specified sample spec and return a pointer to
 // it. The sample spec will have a defined state but
 // pa_sample_spec_valid() will fail for it. \since 0.9.13
@@ -139,7 +139,7 @@ func ParseSampleFormat(s string) SampleFormat {
 	return ret
 }
 
-/*
+/* TODO
 // Maximum required string length for
 // pa_sample_spec_snprint(). Please note that this value can change
 // with any release without warning and without being considered API
