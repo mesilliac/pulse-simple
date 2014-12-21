@@ -94,8 +94,8 @@ func NewStream(
 		dev,
 		stream_name,
 		spec.toC(),
-		nil,
-		nil,
+		cmap.toC(),
+		battr.toC(),
 		&err,
 	)
 
