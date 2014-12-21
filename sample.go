@@ -55,7 +55,7 @@ type SampleSpec struct {
 	Channels uint8
 }
 
-func cSampleSpec(spec *SampleSpec) *C.pa_sample_spec {
+func (spec *SampleSpec) toC() *C.pa_sample_spec {
 	return &C.pa_sample_spec{
 		format:   C.pa_sample_format_t(spec.Format),
 		rate:     C.uint32_t(spec.Rate),
@@ -65,17 +65,17 @@ func cSampleSpec(spec *SampleSpec) *C.pa_sample_spec {
 
 // SampleSpec.BytesPerSecond returns the number of bytes per second of audio.
 func (spec *SampleSpec) BytesPerSecond() uint {
-	return uint(C.pa_bytes_per_second(cSampleSpec(spec)))
+	return uint(C.pa_bytes_per_second(spec.toC()))
 }
 
 // SampleSpec.FrameSize returns the size of a single audio frame in bytes.
 func (spec *SampleSpec) FrameSize() uint {
-	return uint(C.pa_frame_size(cSampleSpec(spec)))
+	return uint(C.pa_frame_size(spec.toC()))
 }
 
 // SampleSpec.SampleSize returns the size of a single sample in bytes.
 func (spec *SampleSpec) SampleSize() uint {
-	return uint(C.pa_sample_size(cSampleSpec(spec)))
+	return uint(C.pa_sample_size(spec.toC()))
 }
 
 // SampleFormat.SampleSize returns the size of a single sample in bytes.
@@ -88,7 +88,7 @@ func (f SampleFormat) SampleSize() uint {
 //
 // The return value will always be rounded down for non-integral values.
 func (spec *SampleSpec) BytesToUsec(bytes uint) uint64 {
-	return uint64(C.pa_bytes_to_usec(C.uint64_t(bytes), cSampleSpec(spec)))
+	return uint64(C.pa_bytes_to_usec(C.uint64_t(bytes), spec.toC()))
 }
 
 // SampleSpec.UsecToBytes returns the number of bytes required
@@ -96,7 +96,7 @@ func (spec *SampleSpec) BytesToUsec(bytes uint) uint64 {
 //
 // The return value will always be rounded down for non-integral values.
 func (spec *SampleSpec) UsecToBytes(usec uint64) uint {
-	return uint(C.pa_usec_to_bytes(C.pa_usec_t(usec), cSampleSpec(spec)))
+	return uint(C.pa_usec_to_bytes(C.pa_usec_t(usec), spec.toC()))
 }
 
 /* TODO?
@@ -108,7 +108,7 @@ pa_sample_spec* pa_sample_spec_init(pa_sample_spec *spec);
 
 // SampleSpec.Valid returns whether or not the given sample spec is valid.
 func (spec *SampleSpec) Valid() bool {
-	if C.pa_sample_spec_valid(cSampleSpec(spec)) == 0 {
+	if C.pa_sample_spec_valid(spec.toC()) == 0 {
 		return false
 	}
 	return true
@@ -116,7 +116,7 @@ func (spec *SampleSpec) Valid() bool {
 
 // SampleSpec.Equal returns whether or not the given sample specs match.
 func (spec *SampleSpec) Equal(other *SampleSpec) bool {
-	if C.pa_sample_spec_equal(cSampleSpec(spec), cSampleSpec(other)) == 0 {
+	if C.pa_sample_spec_equal(spec.toC(), other.toC()) == 0 {
 		return false
 	}
 	return true
@@ -125,8 +125,7 @@ func (spec *SampleSpec) Equal(other *SampleSpec) bool {
 // SampleFormat.String returns a string describing the format.
 func (f SampleFormat) String() string {
 	cstr := C.pa_sample_format_to_string(C.pa_sample_format_t(f))
-	ret := C.GoString(cstr)
-	return ret
+	return C.GoString(cstr)
 }
 
 // ParseSampleFormat returns the SampleFormat described by the given string.
@@ -135,8 +134,7 @@ func (f SampleFormat) String() string {
 func ParseSampleFormat(s string) SampleFormat {
 	cstr := C.CString(s)
 	defer C.free(unsafe.Pointer(cstr))
-	ret := SampleFormat(C.pa_parse_sample_format(cstr))
-	return ret
+	return SampleFormat(C.pa_parse_sample_format(cstr))
 }
 
 /* TODO

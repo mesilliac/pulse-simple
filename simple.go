@@ -96,7 +96,7 @@ func NewStream(
 		C.pa_stream_direction_t(dir),
 		dev,
 		stream_name,
-		cSampleSpec(spec),
+		spec.toC(),
 		nil,
 		nil,
 		&err,
