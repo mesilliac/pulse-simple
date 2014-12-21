@@ -57,7 +57,6 @@ func Playback(clientName, streamName string, spec *SampleSpec) (*Stream, error) 
 	return NewStream("", clientName, STREAM_PLAYBACK, "", streamName, spec, nil, nil)
 }
 
-type ChannelMap int // FIXME: STUB
 type BufferAttr int // FIXME: STUB
 
 func NewStream(
