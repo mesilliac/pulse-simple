@@ -33,7 +33,6 @@ http://www.freedesktop.org/software/pulseaudio/doxygen/simple.html
 todo
 ----
 
- * buffer attributes for streams (medium)
  * proper error reporting (easy)
 
 license
