@@ -34,6 +34,7 @@ todo
 ----
 
  * proper error reporting (easy)
+ * tidy up loose ends, such as `pa_sample_spec_snprint` (medium)
 
 license
 -------
