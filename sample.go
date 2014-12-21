@@ -133,10 +133,10 @@ func (f SampleFormat) String() string {
 //
 // The string should be as returned by SampleFormat.String().
 func ParseSampleFormat(s string) SampleFormat {
-    cstr := C.CString(s)
-    defer C.free(unsafe.Pointer(cstr))
-    ret := SampleFormat(C.pa_parse_sample_format(cstr))
-    return ret
+	cstr := C.CString(s)
+	defer C.free(unsafe.Pointer(cstr))
+	ret := SampleFormat(C.pa_parse_sample_format(cstr))
+	return ret
 }
 
 /*
@@ -165,35 +165,34 @@ char* pa_bytes_snprint(char *s, size_t l, unsigned v);
 //
 // Returns -1 when endianness does not apply to this format.
 func (f SampleFormat) IsLe() int {
-    return int(C.pa_sample_format_is_le(C.pa_sample_format_t(f)))
+	return int(C.pa_sample_format_is_le(C.pa_sample_format_t(f)))
 }
 
 // SampleFormat.IsBe returns 1 when the format is big endian.
 //
 // Returns -1 when endianness does not apply to this format.
 func (f SampleFormat) IsBe() int {
-    return int(C.pa_sample_format_is_be(C.pa_sample_format_t(f)))
+	return int(C.pa_sample_format_is_be(C.pa_sample_format_t(f)))
 }
 
 // SampleFormat.IsNe returns 1 when the format is native endian.
 //
 // Returns -1 when endianness does not apply to this format.
 func (f SampleFormat) IsNe() int {
-    // note: C.pa_sample_format_is_ne() doesn't seem to work
-    if SAMPLE_S16NE == SAMPLE_S16LE {
-        return int(C.pa_sample_format_is_le(C.pa_sample_format_t(f)))
-    }
-    return int(C.pa_sample_format_is_be(C.pa_sample_format_t(f)))
+	// note: C.pa_sample_format_is_ne() doesn't seem to work
+	if SAMPLE_S16NE == SAMPLE_S16LE {
+		return int(C.pa_sample_format_is_le(C.pa_sample_format_t(f)))
+	}
+	return int(C.pa_sample_format_is_be(C.pa_sample_format_t(f)))
 }
 
 // SampleFormat.IsRe returns 1 when the format is reverse endian.
 //
 // Returns -1 when endianness does not apply to this format.
 func (f SampleFormat) IsRe() int {
-    // note: C.pa_sample_format_is_re() doesn't seem to work
-    if SAMPLE_S16NE == SAMPLE_S16LE {
-        return int(C.pa_sample_format_is_be(C.pa_sample_format_t(f)))
-    }
-    return int(C.pa_sample_format_is_le(C.pa_sample_format_t(f)))
+	// note: C.pa_sample_format_is_re() doesn't seem to work
+	if SAMPLE_S16NE == SAMPLE_S16LE {
+		return int(C.pa_sample_format_is_be(C.pa_sample_format_t(f)))
+	}
+	return int(C.pa_sample_format_is_le(C.pa_sample_format_t(f)))
 }
-
