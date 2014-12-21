@@ -164,7 +164,7 @@ func (m *ChannelMap) InitAuto(channels uint, mapping ChannelMapDef) error {
 	cmap := &C.pa_channel_map{}
 	mapped := C.pa_channel_map_init_auto(cmap, C.unsigned(channels), C.pa_channel_map_def_t(mapping))
 	if mapped == nil {
-		return errors.New(fmt.Sprintf("Could not map %d channels with ChannelMapDef %v", channels, mapping))
+		return fmt.Errorf("Could not map %d channels with ChannelMapDef %v", channels, mapping)
 	}
 	m.fromC(cmap)
 	return nil

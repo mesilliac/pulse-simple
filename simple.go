@@ -21,11 +21,6 @@
 // http://www.freedesktop.org/software/pulseaudio/doxygen/simple.html
 package pulse
 
-import (
-	"errors"
-	"unsafe"
-)
-
 /*
 #cgo pkg-config: libpulse-simple
 
@@ -33,6 +28,7 @@ import (
 #include <pulse/simple.h>
 */
 import "C"
+import "unsafe"
 
 type StreamDirection C.pa_stream_direction_t
 
@@ -102,7 +98,7 @@ func NewStream(
 	if err == C.PA_OK {
 		return s, nil
 	}
-	return s, errors.New("whatever")
+	return s, errorFromCode(err)
 }
 
 // Stream.Free closes the stream and frees the associated memory.
@@ -119,7 +115,7 @@ func (s *Stream) Drain() (int, error) {
 	if err == C.PA_OK {
 		return int(written), nil
 	}
-	return int(written), errors.New("summt went wrong")
+	return int(written), errorFromCode(err)
 }
 
 // Stream.Flush flushes the playback buffer, discarding any audio therein
@@ -129,7 +125,7 @@ func (s *Stream) Flush() (int, error) {
 	if err == C.PA_OK {
 		return int(flushed), nil
 	}
-	return int(flushed), errors.New("summt went wrong")
+	return int(flushed), errorFromCode(err)
 }
 
 // Stream.Write writes the given data to the stream,
@@ -145,7 +141,7 @@ func (s *Stream) Write(data []byte) (int, error) {
 	if err == C.PA_OK {
 		return int(written), nil
 	}
-	return int(written), errors.New("summt went wrong")
+	return int(written), errorFromCode(err)
 }
 
 // Stream.Read reads data from the stream,
@@ -161,7 +157,7 @@ func (s *Stream) Read(data []byte) (int, error) {
 	if err == C.PA_OK {
 		return int(written), nil
 	}
-	return int(written), errors.New("summt went wrong")
+	return int(written), errorFromCode(err)
 }
 
 // Stream.Latency returns the playback latency in microseconds.
@@ -171,5 +167,5 @@ func (s *Stream) Latency() (uint64, error) {
 	if err == C.PA_OK {
 		return uint64(lat), nil
 	}
-	return uint64(lat), errors.New("summt went wrong")
+	return uint64(lat), errorFromCode(err)
 }

@@ -38,7 +38,6 @@ http://www.freedesktop.org/software/pulseaudio/doxygen/simple.html
 todo
 ----
 
- * proper error reporting (easy)
  * tidy up loose ends, such as `pa_sample_spec_snprint` (medium)
 
 license
