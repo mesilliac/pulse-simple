@@ -34,41 +34,6 @@ import (
 */
 import "C"
 
-type SampleFormat C.pa_sample_format_t
-
-const (
-	SAMPLE_U8        SampleFormat = C.PA_SAMPLE_U8
-	SAMPLE_ALAW      SampleFormat = C.PA_SAMPLE_ALAW
-	SAMPLE_ULAW      SampleFormat = C.PA_SAMPLE_ULAW
-	SAMPLE_S16LE     SampleFormat = C.PA_SAMPLE_S16LE
-	SAMPLE_S16BE     SampleFormat = C.PA_SAMPLE_S16BE
-	SAMPLE_FLOAT32LE SampleFormat = C.PA_SAMPLE_FLOAT32LE
-	SAMPLE_FLOAT32BE SampleFormat = C.PA_SAMPLE_FLOAT32BE
-	SAMPLE_S32LE     SampleFormat = C.PA_SAMPLE_S32LE
-	SAMPLE_S32BE     SampleFormat = C.PA_SAMPLE_S32BE
-	SAMPLE_S24LE     SampleFormat = C.PA_SAMPLE_S24LE
-	SAMPLE_S24BE     SampleFormat = C.PA_SAMPLE_S24BE
-	SAMPLE_S24_32LE  SampleFormat = C.PA_SAMPLE_S24_32LE
-	SAMPLE_S24_32BE  SampleFormat = C.PA_SAMPLE_S24_32BE
-	SAMPLE_MAX       SampleFormat = C.PA_SAMPLE_MAX
-	SAMPLE_INVALID   SampleFormat = C.PA_SAMPLE_INVALID
-)
-
-const (
-	SAMPLE_S16NE     SampleFormat = C.PA_SAMPLE_S16NE
-	SAMPLE_FLOAT32NE SampleFormat = C.PA_SAMPLE_FLOAT32NE
-	SAMPLE_S32NE     SampleFormat = C.PA_SAMPLE_S32NE
-	SAMPLE_S24NE     SampleFormat = C.PA_SAMPLE_S24NE
-	SAMPLE_S24_32NE  SampleFormat = C.PA_SAMPLE_S24_32NE
-	SAMPLE_S16RE     SampleFormat = C.PA_SAMPLE_S16RE
-	SAMPLE_FLOAT32RE SampleFormat = C.PA_SAMPLE_FLOAT32RE
-	SAMPLE_S32RE     SampleFormat = C.PA_SAMPLE_S32RE
-	SAMPLE_S24RE     SampleFormat = C.PA_SAMPLE_S24RE
-	SAMPLE_S24_32RE  SampleFormat = C.PA_SAMPLE_S24_32RE
-)
-
-const SAMPLE_FLOAT32 SampleFormat = C.PA_SAMPLE_FLOAT32
-
 type StreamDirection C.pa_stream_direction_t
 
 const (
@@ -77,12 +42,6 @@ const (
 	STREAM_RECORD      StreamDirection = C.PA_STREAM_RECORD
 	STREAM_UPLOAD      StreamDirection = C.PA_STREAM_UPLOAD
 )
-
-type SampleSpec struct {
-	Format   SampleFormat
-	Rate     uint32
-	Channels uint8
-}
 
 type Stream struct {
 	simple *C.pa_simple
@@ -131,19 +90,13 @@ func NewStream(
 
 	var err C.int
 
-	ss := C.pa_sample_spec{
-		format:   C.pa_sample_format_t(spec.Format),
-		rate:     C.uint32_t(spec.Rate),
-		channels: C.uint8_t(spec.Channels),
-	}
-
 	s.simple = C.pa_simple_new(
 		server,
 		name,
 		C.pa_stream_direction_t(dir),
 		dev,
 		stream_name,
-		&ss,
+		cSampleSpec(spec),
 		nil,
 		nil,
 		&err,
