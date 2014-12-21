@@ -4,6 +4,9 @@ pulse-simple
 Cgo bindings to PulseAudio's Simple API,
 for easily playing or capturing raw audio.
 
+The full Simple API is supported,
+including channel mapping and setting buffer attributes.
+
 usage
 -----
 
@@ -15,8 +18,10 @@ is completely consumed or filled, or an error occurs.
 
 The format of the data will be as requested on stream creation.
 
-For example, assuming "data" contains raw bytes representing stereo int16 data
-in little-endian format, the following will obtain a playback stream
+For example,
+assuming "data" contains raw bytes representing stereophonic audio
+in little-endian 16-bit integer PCM format,
+the following will obtain a playback stream
 and play the given data as audio on the default sound device.
 
     ss := pulse.SampleSpec{pulse.SAMPLE_S16LE, 44100, 2}
