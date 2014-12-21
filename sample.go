@@ -56,7 +56,7 @@ type SampleSpec struct {
 }
 
 func (spec *SampleSpec) toC() *C.pa_sample_spec {
-	if m == nil {
+	if spec == nil {
 		return nil
 	}
 	return &C.pa_sample_spec{
