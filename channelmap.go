@@ -88,13 +88,12 @@ const (
 	CHANNEL_POSITION_MAX ChannelPosition = C.PA_CHANNEL_POSITION_MAX
 )
 
-/* TODO
-// A mask of channel positions. \since 0.9.16
-typedef uint64_t pa_channel_position_mask_t;
+type ChannelPositionMask uint64
 
-// Makes a bit mask from a channel position. \since 0.9.16
-#define PA_CHANNEL_POSITION_MASK(f) ((pa_channel_position_mask_t) (1ULL << (f)))
-*/
+// ChannelPosition.Mask makes a bitmask from a ChannelPosition.
+func (p ChannelPosition) Mask() ChannelPositionMask {
+	return 1 << uint(p)
+}
 
 type ChannelMapDef C.pa_channel_map_def_t
 
@@ -295,7 +294,7 @@ func (m *ChannelMap) HasPosition(p ChannelPosition) bool {
 	return C.pa_channel_map_has_position(m.toC(), C.pa_channel_position_t(p)) != 0
 }
 
-/* TODO
-// Generates a bit mask from a channel map. \since 0.9.16
-pa_channel_position_mask_t pa_channel_map_mask(const pa_channel_map *map) PA_GCC_PURE;
-*/
+// ChannelMap.Mask generates a bitmask from a ChannelMap.
+func (m *ChannelMap) Mask() ChannelPositionMask {
+	return ChannelPositionMask(C.pa_channel_map_mask(m.toC()))
+}

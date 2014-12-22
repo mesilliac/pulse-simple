@@ -77,8 +77,11 @@ func main() {
 		cmap.HasPosition(pulse.CHANNEL_POSITION_SUBWOOFER))
 	fmt.Printf("stereo has subwoofer: %v\n",
 		stereo.HasPosition(pulse.CHANNEL_POSITION_SUBWOOFER))
+	fmt.Printf("subwoofer channel mask: 0x%x\n",
+		pulse.CHANNEL_POSITION_SUBWOOFER.Mask())
 
 	fmt.Printf("\nsurround.String(): %v\n", cmap.String())
+
 }
 
 func print_info(cmap *pulse.ChannelMap) {
@@ -86,4 +89,5 @@ func print_info(cmap *pulse.ChannelMap) {
 	for i := 0; i < int(cmap.Channels); i++ {
 		fmt.Printf("Map[%d]: %d (%v)\n", i, cmap.Map[i], cmap.Map[i])
 	}
+	fmt.Printf("ChannelPositionMask: %b\n", cmap.Mask())
 }
