@@ -1,4 +1,4 @@
-// pulse-simple wraps PulseAudio's Simple API using CGo,
+// pulse-simple wraps PulseAudio's Simple API using cgo,
 // for easy audio playback and capture via PulseAudio.
 //
 // Basic usage is to request a playback or capture stream,
