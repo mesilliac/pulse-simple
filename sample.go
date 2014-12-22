@@ -8,6 +8,7 @@ package pulse
 */
 import "C"
 import "unsafe"
+import "strings"
 
 const (
 	CHANNELS_MAX = C.PA_CHANNELS_MAX // Maximum number of allowed channels
@@ -66,6 +67,12 @@ func (spec *SampleSpec) toC() *C.pa_sample_spec {
 	}
 }
 
+func (spec *SampleSpec) fromC(cspec *C.pa_sample_spec) {
+	spec.Format = SampleFormat(cspec.format)
+	spec.Rate = uint32(cspec.rate)
+	spec.Channels = uint8(cspec.channels)
+}
+
 // SampleSpec.BytesPerSecond returns the number of bytes per second of audio.
 func (spec *SampleSpec) BytesPerSecond() uint {
 	return uint(C.pa_bytes_per_second(spec.toC()))
@@ -102,12 +109,14 @@ func (spec *SampleSpec) UsecToBytes(usec uint64) uint {
 	return uint(C.pa_usec_to_bytes(C.pa_usec_t(usec), spec.toC()))
 }
 
-/* TODO?
-// Initialize the specified sample spec and return a pointer to
-// it. The sample spec will have a defined state but
-// pa_sample_spec_valid() will fail for it. \since 0.9.13
-pa_sample_spec* pa_sample_spec_init(pa_sample_spec *spec);
-*/
+// SampleSpec.Init initializes the SampleSpec to a defined state,
+// for which SampleSpec.Valid() will return false.
+//
+// Calling Init() on a SampleSpec is not necessary,
+// but this method is included for compatibility.
+func (spec *SampleSpec) Init() {
+	spec.fromC(C.pa_sample_spec_init(spec.toC()))
+}
 
 // SampleSpec.Valid returns whether or not the given sample spec is valid.
 func (spec *SampleSpec) Valid() bool {
@@ -140,17 +149,16 @@ func ParseSampleFormat(s string) SampleFormat {
 	return SampleFormat(C.pa_parse_sample_format(cstr))
 }
 
-/* TODO
-// Maximum required string length for
-// pa_sample_spec_snprint(). Please note that this value can change
-// with any release without warning and without being considered API
-// or ABI breakage. You should not use this definition anywhere where
-// it might become part of an ABI.
-#define PA_SAMPLE_SPEC_SNPRINT_MAX 32
+// SampleSpec.String returns a human-readable string describing the spec.
+func (spec *SampleSpec) String() string {
+	s := strings.Repeat(" ", int(C.PA_SAMPLE_SPEC_SNPRINT_MAX))
+	cstr := C.CString(s)
+	defer C.free(unsafe.Pointer(cstr))
+	C.pa_sample_spec_snprint(cstr, C.size_t(C.PA_SAMPLE_SPEC_SNPRINT_MAX), spec.toC())
+	return C.GoString(cstr)
+}
 
-// Pretty print a sample type specification to a string
-char* pa_sample_spec_snprint(char *s, size_t l, const pa_sample_spec *spec);
-
+/* ** NOT WRAPPED: pa_bytes_snprint **
 // Maximum required string length for pa_bytes_snprint(). Please note
 // that this value can change with any release without warning and
 // without being considered API or ABI breakage. You should not use

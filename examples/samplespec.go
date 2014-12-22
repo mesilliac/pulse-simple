@@ -29,6 +29,7 @@ func create_spec(f pulse.SampleFormat, r uint32, c uint8) *pulse.SampleSpec {
 }
 
 func print_info(spec *pulse.SampleSpec) {
+	fmt.Printf("String:            %v\n", spec.String())
 	fmt.Printf("Valid:             %v\n", spec.Valid())
 	fmt.Printf("BytesPerSecond:    %v\n", spec.BytesPerSecond())
 	fmt.Printf("FrameSize:         %v\n", spec.FrameSize())
