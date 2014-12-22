@@ -35,11 +35,6 @@ More example usage can be found in the examples folder.
 For more information, see the PulseAudio Simple API documentation at
 http://www.freedesktop.org/software/pulseaudio/doxygen/simple.html
 
-todo
-----
-
- * tidy up loose ends, such as `pa_sample_spec_snprint` (medium)
-
 license
 -------
 
