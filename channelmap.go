@@ -3,6 +3,7 @@ package pulse
 import (
 	"errors"
 	"fmt"
+	"strings"
 	"unsafe"
 )
 
@@ -134,12 +135,14 @@ func (m *ChannelMap) toC() *C.pa_channel_map {
 	return cmap
 }
 
-/* TODO?
-// Initialize the specified channel map and return a pointer to
-// it. The channel map will have a defined state but
-// pa_channel_map_valid() will fail for it.
-pa_channel_map* pa_channel_map_init(pa_channel_map *m);
-*/
+// ChannelMap.Init initializes the ChannelMp to a defined state,
+// for which ChannelMap.Valid() will return false.
+//
+// calling Init() on a ChannelMap is not necessary,
+// but this method is included for compatibility.
+func (m *ChannelMap) Init() {
+	m.fromC(C.pa_channel_map_init(m.toC()))
+}
 
 // ChannelMap.InitMono initializes the channel map for monaural audio.
 func (m *ChannelMap) InitMono() {
@@ -205,23 +208,24 @@ func (p ChannelPosition) PrettyString() string {
 	return C.GoString(cstr)
 }
 
-/* TODO
-// The maximum length of strings returned by
-// pa_channel_map_snprint(). Please note that this value can change
-// with any release without warning and without being considered API
-// or ABI breakage. You should not use this definition anywhere where
-// it might become part of an ABI.
-#define PA_CHANNEL_MAP_SNPRINT_MAX 336
+// ChannelMap.String returns a string describing the mapping.
+func (m *ChannelMap) String() string {
+	s := strings.Repeat(" ", int(C.PA_CHANNEL_MAP_SNPRINT_MAX))
+	cstr := C.CString(s)
+	defer C.free(unsafe.Pointer(cstr))
+	C.pa_channel_map_snprint(cstr, C.size_t(C.PA_CHANNEL_MAP_SNPRINT_MAX), m.toC())
+	return C.GoString(cstr)
+}
 
-// Make a human readable string from the specified channel map
-char* pa_channel_map_snprint(char *s, size_t l, const pa_channel_map *map);
-
-// Parse a channel position list or well-known mapping name into a
-// channel map structure. This turns the output of
-// pa_channel_map_snprint() and pa_channel_map_to_name() back into a
-// pa_channel_map
-pa_channel_map *pa_channel_map_parse(pa_channel_map *map, const char *s);
-*/
+// ChannelMap.Parse parses a channel position list or well-known mapping name
+// into a channel map structure.
+//
+// Input should be as returned by ChannelMap.Name() or ChannelMap.String().
+func (m *ChannelMap) Parse(s string) {
+	cstr := C.CString(s)
+	defer C.free(unsafe.Pointer(cstr))
+	m.fromC(C.pa_channel_map_parse(m.toC(), cstr))
+}
 
 // ChannelMap.Equal compares two channel maps, returning true iff they match.
 func (m *ChannelMap) Equal(other *ChannelMap) bool {
