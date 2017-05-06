@@ -53,8 +53,3 @@ license
 
 MIT (see the included LICENSE file for full license text)
 
-authors
--------
-
-Thomas Iorns <mesilliac@tomanui.nz>
-
